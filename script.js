@@ -2,6 +2,24 @@
 const tableBody = document.getElementById("tableBody");
 let chart = null;
 
+// Имитация загрузки данных с сервера
+async function fetchData() {
+  const response = await fetch("./data/data.js"); // Путь к файлу данных
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const text = await response.text();
+  const firstOccurrence = text.indexOf("[");
+  const lastOccurrence = text.lastIndexOf("]");
+  const jsonString = text.substring(firstOccurrence, lastOccurrence + 1);
+  try {
+    return JSON.parse(jsonString);
+  } catch (e) {
+    console.log("Ошибка парсинга JSON", e);
+    return null;
+  }
+}
+
 // Функция для создания Highcharts графика
 function createChart(containerId, data, indicator) {
   return Highcharts.chart(containerId, {
@@ -108,4 +126,7 @@ function handleRowClick(row, containerId) {
   }, 0);
 }
 
-createTableRows();
+// Загружаем данные и затем создаем таблицу
+fetchData().then((data) => {
+  createTableRows(data);
+});
