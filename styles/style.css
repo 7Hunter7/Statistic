@@ -15,9 +15,9 @@ h1 {
   max-width: 1200px;
 }
 table {
+  margin-bottom: 20px;
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
   overflow: hidden;
 }
 th,
@@ -41,7 +41,7 @@ td:nth-child(4) {
 }
 /* Стили для ячеек с числами */
 .number-cell {
-  display: inline-block;
+  display: block;
   width: 80%;
   text-align: center;
 }
@@ -50,7 +50,8 @@ tbody tr:hover {
   cursor: pointer;
 }
 .chart-container {
-  margin-top: 20px;
+  padding: 0px;
+  margin: 0px;
   width: 100%;
   overflow: hidden;
 }
@@ -63,15 +64,15 @@ tbody tr:hover {
 .no-change {
   background-color: #f5f5f5; /* Светло-серый */
 }
+/* Стили для ячеек с процентами */
 .percentage-positive {
   color: green;
 }
 .percentage-negative {
   color: red;
 }
-/* Стили для ячеек с процентами */
 .percentage-cell {
-  display: inline-block;
+  display: block;
   width: 20%;
   text-align: right;
 }
