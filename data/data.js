@@ -3,7 +3,7 @@ const tableData = [
     indicator: "Выручка, руб",
     currentDay: 500521,
     yesterday: 480521,
-    thisDayLastWeek: 4808121,
+    thisDayLastWeek: 4805121,
     data: [5, 10, 15, 20, 25, 30], // Данные для графика
   },
   {
