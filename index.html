@@ -3,26 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Статистика продаж - Наш сайт</title>
+    <meta
+      name="description"
+      content="Статистика продаж за текущий день, вчера и эту неделю. Визуализация данных с помощью графиков."
+    />
+    <meta name="keywords" content="статистика, продажи, отчет, графики" />
     <link rel="stylesheet" href="./styles/style.css" />
-    <title>Table</title>
   </head>
   <body>
-    <div class="container">
+    <main>
       <h1>Статистика</h1>
-      <table id="myTable">
-        <thead>
-          <tr>
-            <th>Показатель</th>
-            <th>Текущий день</th>
-            <th>Вчера</th>
-            <th>Этот день недели</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-      <div id="chartContainer" style="display: none"></div>
-    </div>
-
+      <section class="container">
+        <table id="myTable">
+          <thead>
+            <tr>
+              <th>Показатель</th>
+              <th>Текущий день</th>
+              <th>Вчера</th>
+              <th>Этот день недели</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <figure class="highcharts-figure">
+          <div id="chartContainer" style="display: none"></div>
+        </figure>
+      </section>
+    </main>
     <script src="data/data.js"></script>
     <script src="script.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
