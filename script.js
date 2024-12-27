@@ -1,6 +1,5 @@
 // Получение элементов DOM
 const tableBody = document.getElementById("tableBody");
-const chartContainer = document.getElementById("chartContainer");
 let chart = null;
 
 // Функция для создания Highcharts графика
@@ -14,7 +13,15 @@ function createChart(containerId, data, indicator) {
       text: `График для показателя "${indicator}"`,
     },
     xAxis: {
-      categories: ["День 1", "День 2", "День 3", "День 4", "День 5", "День 6"],
+      categories: [
+        "День 1",
+        "День 2",
+        "День 3",
+        "День 4",
+        "День 5",
+        "День 6",
+        "День 7",
+      ],
     },
     yAxis: {
       title: {
@@ -83,18 +90,10 @@ function createTableRows() {
   });
 }
 
-// Функция для обработки клика по строке
-function handleRowClick(row, index) {
-  tableBody.style.transition = "max-height 0.3s ease-out";
-  tableBody.style.maxHeight = "0px";
-  setTimeout(() => {
-    showChart(row, index);
-  }, 0);
-}
-
-// Функция для отображения графика
-function showChart(row, containerId) {
+// Функция для обработки клика по строке и отображения графика
+function handleRowClick(row, containerId) {
   const chartContainer = document.getElementById(containerId);
+  chartContainer.style.transition = "max-height 0.3s ease-out";
   chartContainer.style.display = "block";
   chartContainer.style.opacity = 0;
   chartContainer.style.transition = "opacity 0.5s";
@@ -102,7 +101,7 @@ function showChart(row, containerId) {
   if (chart) {
     chart.destroy();
   }
-  chart = createChart(row.data, row.indicator);
+  chart = createChart(containerId, row.data, row.indicator);
 
   setTimeout(() => {
     chartContainer.style.opacity = 1;
