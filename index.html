@@ -3,7 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/stiyle.css" />
     <title>Table</title>
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <h1>Статистика</h1>
+      <table id="myTable">
+        <thead>
+          <tr>
+            <th>Показатель</th>
+            <th>Текущий день</th>
+            <th>Вчера</th>
+            <th>Этот день недели</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div id="chartContainer" style="display: none"></div>
+    </div>
+
+    <script src="data/data.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
