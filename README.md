@@ -1,71 +1,100 @@
-# Код `script.js` состоит из трех основных частей:
+# Код script.js состоит из следующих основных частей:
 
-1. Получение элементов DOM: Получение доступа к элементам таблицы и контейнеру графика.
-2. createTableRows(): Функция для создания строк таблицы на основе данных из tableData.
-3. handleRowClick(): Функция для обработки клика по строке таблицы и отображения графика.
+1. Загрузка данных с сервера:
+
+- Функция `fetchData()` имитирует асинхронную загрузку данных.
+
+2. Создание строк таблицы:
+
+- Функция `createTableRows()` создает строки таблицы на основе полученных данных.
+
+3. Обработка клика по строке:
+
+- Функция `handleRowClick()` обрабатывает клик по строке таблицы, отображая или скрывая график.
+
+4. Создание `Highcharts` графика:
+
+- Функция `createChart()` формирует график из представленных данных с исользованием библиотеки `Highcharts`.
+
+5. Инициализация:
+
+- Вызов `fetchData()` и последующее создание таблицы после загрузки данных.
 
 ## Детальное описание:
 
-### Получение элементов DOM:
+### Загрузка данных с сервера:
 
-1. `const tableBody = document.getElementById("tableBody");` - ищет элемент с id="tableBody" в HTML-документе и сохраняет его в переменную tableBody.
+1. `async function fetchData()` - Объявляет асинхронную функцию `fetchData`, имитирующую получение данных с сервера.
 
-- Этот элемент представляет собой `<tbody>` таблицы, куда будут добавляться строки данных.
+2. `await fetch("./data/data.json");` - Выполняет HTTP-запрос к файлу `./data/data.json`.
 
-2. `const chartContainer = document.getElementById("chartContainer");` - ищет элемент с `id="chartContainer"` в HTML-документе и сохраняет его в переменную `chartContainer`.
+3. `if (!response.ok) { throw new Error('HTTP error! status: ${response.status}');}` - Обрабатывает ответ от "сервера".
 
-- Этот элемент представляет собой `<div>`, в котором будет отображаться график.
+- Проверяет, чтобы ответ был успешным (`response.ok`). В случае ошибки выбрасывает исключение.
 
-### createTableRows() Function:
+- Использует `response.json();` для преобразования JSON-ответа в объект JavaScript.
 
-1. `function createTableRows():` - объявляет функцию createTableRows.
+### Создание строк таблицы:
 
-2. `tableData.forEach((row, index) => { ... }):` - метод `forEach` перебирает каждый элемент массива tableData (данные для таблицы). Внутри цикла:
+1. `function createTableRows(data)` - Объявляет функцию `createTableRows`, принимающую данные для таблицы (`data`) в качестве аргумента.
 
-- `row` - текущий объект из массива `tableData`.
+2. `data.forEach((row, index) => { ... })` - Метод `forEach` перебирает каждый элемент массива `data` (данные для таблицы).
+
+3. Внутри цикла:
+
+- `row` - текущий объект данных из массива `data`.
 - `index` - индекс текущего элемента в массиве.
+- `const tr = document.createElement("tr");` - Создает новый элемент `<tr>` (строка таблицы).
+- `tr.innerHTML = \…;` - Заполняет строку данными из текущего объекта `row`.
 
-3. `const tr = document.createElement("tr");` - создает новый элемент `<tr>` (строка таблицы).
-4. `tr.innerHTML = \…“:` - заполняет строку `<tr>` данными из текущего объекта row.
+#### Используется шаблонная строка для удобного добавления HTML:
 
-Используется шаблонная строка для удобного добавления HTML:
+- `<td>${row.indicator}</td>` - Ячейка для названия показателя.
+- `<td>${formatNumber(row.currentDay)}</td>` - Ячейка для текущего значения (отформатированного с помощью `formatNumber`).
+- `<td> <span class="number-cell">${formatNumber(row.yesterday)}</span>` и `<span style="float: right;" class="${percentageClass}">${percentageChange}</span></td>`- Ячейка со значением за вчерашний день и процентным изменением. Вложенные span для выравнивания.
+- `<td>${formatNumber(row.thisDayLastWeek)}</td>` - Ячейка для значения на этой неделе (отформатированного с помощью `formatNumber`).
 
-- `<td>${row.indicator}</td>`- ячейка для показателя.
-- `<td>${row.currentDay}</td>` - ячейка для текущего дня.
-- `<td>${row.yesterday}</td>` - ячейка для вчерашнего дня.
-- `<td>${row.thisDayLastWeek}</td>` - ячейка для этого дня на прошлой неделе.
+3.  `tr.dataset.chartIndex = index;` - Сохраняет индекс элемента `index` в `data` атрибуте `data-chart-index`.
 
-5. `tr.addEventListener("click", () => handleRowClick(row.data, row.indicator));` - добавляет обработчик события `click` на созданную строку `<tr>`.
+4.  `tr.addEventListener("click", () => handleRowClick(row, index));` - Добавляет обработчик события `click` на созданную строку `<tr>`.
 
-- При клике будет вызвана функция `handleRowClick`, передавая ей данные для графика (row.data) и название показателя (row.indicator).
+- При клике будет вызвана функция `handleRowClick`, передавая ей объект данных `row` и `index` строки.
 
-6. `tableBody.appendChild(tr);` - добавляет созданную строку `<tr>` в элемент `<tbody>` таблицы (полученный ранее по id `tableBody`).
+5. `tableBody.appendChild(tr);` - Добавляет созданную строку `<tr>` в элемент `<tbody>` таблицы (полученный ранее по `id tableBody`).
 
-### handleRowClick() Function:
+### Обработка клика по строке:
 
-1. `function handleRowClick(data, indicator)` - объявляет функцию `handleRowClick`, принимающую данные для графика `data` и название показателя `indicator` в качестве аргументов.
+1. `function handleRowClick(row, index)` - объявляет функцию `handleRowClick`, принимающую объект данных `row` и `index` строки в качестве аргументов.
 
-2. `chartContainer.style.display = "block";` - делает контейнер графика (chartContainer) видимым, так как по умолчанию у него `display: none`.
+2. `const chartContainerId = 'chart-container-${index}';` - Формирует уникальный `id` для элемента контейнера графика.
 
-3. `Highcharts.chart(chartContainer, { ... });` - инициализирует график с помощью библиотеки `Highcharts`.
+3. `const chartContainerDiv = document.createElement("tr");` - Создает элемент `<tr>` для графика.
 
-- Первый аргумент chartContainer - элемент, в котором будет отрисован график.
-- Второй аргумент - объект с конфигурацией графика
+4. `chartContainerDiv.innerHTML = \` - Заполняет созданный элемент строкой с контейнером для графика
 
-4.  `title: { text: \График для показателя “${indicator}”}` - устанавливает заголовок графика, используя название показателя indicator.
+5. Управление открытой строкой:
 
-5.  `xAxis: { categories: ["День 1", "День 2", "День 3", "День 4", "День 5", "День 6"] }` - устанавливает подписи для оси `X`, показывающие дни.
+- Проверяет была ли открыта строка с графиком `if(currentlyOpenChartRow)`.
+- Если была, и индекс этой строки тот же, что и у кликнутой - закрывает график, убирая строку.
+- Если строка была, но индекс другой, то удаляет предыдущую строку с графиком.
 
-6.  `yAxis: { title: { text: "Значение" } }` - устанавливает подпись для оси `Y`.
+6. `const clickedRow = tableBody.querySelector(\tr[data-chart-index=”${index}”])` - Получает ссылку на элемент строки на которую кликнули.
 
-7.  `series: [{ name: indicator, data: data, type: "line" }]` - определяет серию данных для графика.
+7. `clickedRow.insertAdjacentElement('afterend', chartContainerDiv);` - Вставляет строку с графиком после строки, на которую кликнули.
 
-8.  `name: indicator` - имя серии, которое будет отображаться в легенде (совпадает с названием показателя).
+8. `const chartContainer = chartContainerDiv.querySelector('.chart-container')` - Получает доступ к контейнеру графика. Анимирует появление графика, присваивая стили.
 
-9.  `data: data` - массив данных для графика (переданные из строки таблицы).
+9. `if (chart) { chart.destroy();}` - Удаляет старый график (если есть).
 
-10. `type: "line"` - тип графика (линейный).
+10. `chart = createChart(chartContainerId, row.data, row.indicator);` - Создает новый график с помощью библиотеки `Highcharts`. Сохраняет ссылку на открытую строку в currentlyOpenChartRow.
 
-### Вызов функции createTableRows():
+## Инициализация:
 
-`createTableRows();` - вызывает функцию `createTableRows()` для отрисовки таблицы на странице при ее загрузке.
+1. `fetchData().then((data) => { createTableRows(data); });` - Вызывает асинхронную функцию `fetchData` для загрузки данных.
+
+- После успешной загрузки данных вызывается функция `createTableRows` для отрисовки таблицы на странице, передавая данные из `fetchData` в качестве аргумента.
+
+## Вспомогательные функции
+
+1. `calculatePercentageChange(current, yesterday)` - Функция для расчета процентного изменения между текущим и вчерашним значением.
+2. `formatNumber(number)` - Функция форматирования чисел с разделителями тысяч.

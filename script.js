@@ -1,4 +1,3 @@
-// Получение элементов DOM
 const tableBody = document.getElementById("tableBody");
 let currentlyOpenChartRow = null;
 let chart = null;
@@ -9,7 +8,7 @@ async function fetchData() {
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  data = await response.json();
+  const data = await response.json();
   return data;
 }
 
@@ -62,11 +61,10 @@ function formatNumber(number) {
   return new Intl.NumberFormat("ru-RU").format(number);
 }
 
-// Функция для создания строк таблицы на основе данных из tableData
-function createTableRows() {
+// Функция для создания строк таблицы на основе данных из data
+function createTableRows(data) {
   data.forEach((row, index) => {
     const tr = document.createElement("tr");
-    // Условное добавление классов к ячейкам для отображения цвета
     const percentageChange = calculatePercentageChange(
       row.currentDay,
       row.yesterday
@@ -88,16 +86,17 @@ function createTableRows() {
     <td>${row.indicator}</td>
     <td>${formatNumber(row.currentDay)}</td>
     <td class="${changeClass}">
-        <span class="number-cell">${formatNumber(row.yesterday)} 
+        <span class="number-cell">${formatNumber(row.yesterday)}</span>
         <span style="float: right;" class="${percentageClass}">${percentageChange}</span>
     </td>
     <td>${formatNumber(row.thisDayLastWeek)}</td>
   `;
 
-    tr.dataset.chartIndex = index; // Сохраняем индекс в data атрибуте
+    tr.dataset.chartIndex = index; // Сохранение индекса в data атрибуте
     tr.addEventListener("click", () => {
       handleRowClick(row, index);
     });
+
     tableBody.appendChild(tr);
   });
 }
@@ -108,11 +107,10 @@ function handleRowClick(row, index) {
   const chartContainerDiv = document.createElement("tr");
 
   chartContainerDiv.innerHTML = `<td colspan="4"><div id="${chartContainerId}" class="chart-container" style="display: none"></div></td>`;
-
+  // Управление открытой строкой
   if (currentlyOpenChartRow) {
     const previousChartIndex = currentlyOpenChartRow.dataset.chartIndex;
     if (previousChartIndex === String(index)) {
-      // Закрываем график, если кликнули по уже открытой строке
       currentlyOpenChartRow.nextElementSibling.remove();
       currentlyOpenChartRow = null;
       return;
@@ -122,7 +120,7 @@ function handleRowClick(row, index) {
   }
   const clickedRow = tableBody.querySelector(`tr[data-chart-index="${index}"]`);
 
-  clickedRow.insertAdjacentElement("afterend", chartContainerDiv); // Вставляем строку с графиком
+  clickedRow.insertAdjacentElement("afterend", chartContainerDiv); // Вставка строки с графиком после строки
   const chartContainer = chartContainerDiv.querySelector(".chart-container");
   chartContainer.style.transition = "max-height 0.3s ease-out";
   chartContainer.style.display = "block";
@@ -141,7 +139,7 @@ function handleRowClick(row, index) {
   currentlyOpenChartRow = clickedRow;
 }
 
-// Загружаем данные и затем создаем таблицу
+// Загрузка данных
 fetchData().then((data) => {
   createTableRows(data);
 });
