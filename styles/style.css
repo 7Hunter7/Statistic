@@ -7,6 +7,10 @@ body {
   font-family: sans-serif;
   margin: 20px;
 }
+h1 {
+  margin: 20px;
+  text-align: center;
+}
 .container {
   max-width: 1200px;
 }
@@ -23,12 +27,14 @@ td {
   background-color: #f5f5f5;
   text-align: left;
 }
-td:nth-child(2) {
-  background-color: #eef9ff;
-}
 th {
   background-color: #f5f5f5;
   font-weight: bold;
+  text-align: center;
+}
+td:nth-child(2) {
+  background-color: #eef9ff;
+  text-align: right;
 }
 tbody tr:hover {
   background-color: #eef9ff;
