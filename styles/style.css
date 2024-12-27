@@ -48,8 +48,8 @@ tbody tr:hover {
   background-color: #f5f5f5; /* Светло-серый */
 }
 .percentage-positive {
-  color: #699564;
+  color: green;
 }
 .percentage-negative {
-  color: #ca595b;
+  color: red;
 }

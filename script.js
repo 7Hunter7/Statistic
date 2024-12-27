@@ -1,6 +1,7 @@
 // Получение элементов DOM
 const tableBody = document.getElementById("tableBody");
 const chartContainer = document.getElementById("chartContainer");
+let chart = null;
 
 // Функция для расчета процентного изменения
 function calculatePercentageChange(current, yesterday) {
@@ -26,17 +27,21 @@ function createTableRows() {
       row.yesterday
     );
     let changeClass = "no-change";
+    let percentageClass = "";
+
     if (percentageChange.startsWith("+")) {
       changeClass = "positive-change";
+      percentageClass = "percentage-positive";
     } else if (percentageChange.startsWith("-")) {
       changeClass = "negative-change";
+      percentageClass = "percentage-negative";
     }
     tr.innerHTML = `
     <td>${row.indicator}</td>
     <td>${formatNumber(row.currentDay)}</td>
     <td class="${changeClass}">${formatNumber(
       row.yesterday
-    )} <span style="float: right;">${percentageChange}</span></td>
+    )} <span style="float: right;" class="${percentageClass}">${percentageChange}</span></td>
     <td>${formatNumber(row.thisDayLastWeek)}</td>
     `;
     tr.addEventListener("click", () => handleRowClick(row.data, row.indicator));
