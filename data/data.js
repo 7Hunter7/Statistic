@@ -1,0 +1,72 @@
+const tableData = [
+  {
+    indicator: "Выручка, руб",
+    currentDay: 500521,
+    yesterday: 480521,
+    thisDayLastWeek: 4808121,
+    data: [5, 10, 15, 20, 25, 30], // Данные для графика
+  },
+  {
+    indicator: "Наличные",
+    currentDay: 300000,
+    yesterday: 300000,
+    thisDayLastWeek: 30000,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Безналичный расчет",
+    currentDay: 100000,
+    yesterday: 100000,
+    thisDayLastWeek: 100000,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Кредитные карты",
+    currentDay: 100521,
+    yesterday: 100521,
+    thisDayLastWeek: 100521,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Средний чек, руб",
+    currentDay: 1300,
+    yesterday: 900,
+    thisDayLastWeek: 900,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Средний гость, руб",
+    currentDay: 1200,
+    yesterday: 800,
+    thisDayLastWeek: 800,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Удаления из чека (после оплаты), руб",
+    currentDay: 1000,
+    yesterday: 1100,
+    thisDayLastWeek: 900,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Удаления из чека (до оплаты), руб",
+    currentDay: 1300,
+    yesterday: 1300,
+    thisDayLastWeek: 900,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Количество чеков",
+    currentDay: 34,
+    yesterday: 36,
+    thisDayLastWeek: 34,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+  {
+    indicator: "Количество гостей",
+    currentDay: 34,
+    yesterday: 36,
+    thisDayLastWeek: 32,
+    data: [5, 10, 15, 20, 25, 30],
+  },
+];
