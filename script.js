@@ -80,8 +80,10 @@ function createTableRows() {
     } else if (percentageChange.startsWith("-")) {
       changeClass = "negative-change";
       percentageClass = "percentage-negative";
+    } else {
+      percentageClass = "percentage-cell";
     }
-    const chartContainerId = `chart-container-${index}`; // Уникальный ID для каждого графика
+
     tr.innerHTML = `
     <td>${row.indicator}</td>
     <td>${formatNumber(row.currentDay)}</td>
