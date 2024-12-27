@@ -1,5 +1,6 @@
 // Получение элементов DOM
 const tableBody = document.getElementById("tableBody");
+let currentlyOpenChartRow = null;
 let chart = null;
 
 // Имитация загрузки данных с сервера
@@ -14,8 +15,8 @@ async function fetchData() {
   const jsonString = text.substring(firstOccurrence, lastOccurrence + 1);
   try {
     return JSON.parse(jsonString);
-  } catch (e) {
-    console.log("Ошибка парсинга JSON", e);
+  } catch (error) {
+    console.log("Ошибка парсинга JSON", error);
     return null;
   }
 }
@@ -98,20 +99,37 @@ function createTableRows() {
     </td>
     <td>${formatNumber(row.thisDayLastWeek)}</td>
   `;
-    const chartContainerDiv = document.createElement("tr");
-    chartContainerDiv.innerHTML = `<td colspan="4"><div id="${chartContainerId}" class="chart-container" style="display: none"></div></td>`;
 
+    tr.dataset.chartIndex = index; // Сохраняем индекс в data атрибуте
     tr.addEventListener("click", () => {
-      handleRowClick(row, chartContainerId);
+      handleRowClick(row, index);
     });
     tableBody.appendChild(tr);
-    tableBody.appendChild(chartContainerDiv);
   });
 }
 
 // Функция для обработки клика по строке и отображения графика
-function handleRowClick(row, containerId) {
-  const chartContainer = document.getElementById(containerId);
+function handleRowClick(row, index) {
+  const chartContainerId = `chart-container-${index}`;
+  const chartContainerDiv = document.createElement("tr");
+
+  chartContainerDiv.innerHTML = `<td colspan="4"><div id="${chartContainerId}" class="chart-container" style="display: none"></div></td>`;
+
+  if (currentlyOpenChartRow) {
+    const previousChartIndex = currentlyOpenChartRow.dataset.chartIndex;
+    if (previousChartIndex === String(index)) {
+      // Закрываем график, если кликнули по уже открытой строке
+      currentlyOpenChartRow.nextElementSibling.remove();
+      currentlyOpenChartRow = null;
+      return;
+    } else {
+      currentlyOpenChartRow.nextElementSibling.remove();
+    }
+  }
+  const clickedRow = tableBody.querySelector(`tr[data-chart-index="${index}"]`);
+
+  clickedRow.insertAdjacentElement("afterend", chartContainerDiv); // Вставляем строку с графиком
+  const chartContainer = chartContainerDiv.querySelector(".chart-container");
   chartContainer.style.transition = "max-height 0.3s ease-out";
   chartContainer.style.display = "block";
   chartContainer.style.opacity = 0;
@@ -120,11 +138,13 @@ function handleRowClick(row, containerId) {
   if (chart) {
     chart.destroy();
   }
-  chart = createChart(containerId, row.data, row.indicator);
+  chart = createChart(chartContainerId, row.data, row.indicator);
 
   setTimeout(() => {
     chartContainer.style.opacity = 1;
   }, 0);
+
+  currentlyOpenChartRow = clickedRow;
 }
 
 // Загружаем данные и затем создаем таблицу
