@@ -2,10 +2,18 @@
   padding: 0;
   margin: 0 auto;
   box-sizing: border-box;
+  text-decoration: none;
 }
 body {
-  font-family: sans-serif;
   margin: 20px;
+  font-family: sans-serif;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  background: #fff;
+}
+img {
+  display: block;
+  max-width: 100%;
 }
 h1 {
   margin: 20px;
