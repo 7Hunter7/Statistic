@@ -7,7 +7,7 @@ function createChart(containerId, data, indicator) {
   return Highcharts.chart(containerId, {
     chart: {
       type: "line",
-      height: "300px",
+      height: "400px",
     },
     title: {
       text: `График для показателя "${indicator}"`,
