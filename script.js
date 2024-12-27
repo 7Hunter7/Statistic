@@ -87,7 +87,7 @@ function createTableRows() {
     <td>${formatNumber(row.currentDay)}</td>
     <td class="${changeClass}">
         <span class="number-cell">${formatNumber(row.yesterday)} 
-        <span class="percentage-cell" style="float: right;" class="${percentageClass}">${percentageChange}</span>
+        <span style="float: right;" class="${percentageClass}">${percentageChange}</span>
     </td>
     <td>${formatNumber(row.thisDayLastWeek)}</td>
   `;
