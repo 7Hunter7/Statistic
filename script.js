@@ -3,10 +3,37 @@ const tableBody = document.getElementById("tableBody");
 const chartContainer = document.getElementById("chartContainer");
 let chart = null;
 
+// Функция для создания Highcharts графика
+function createChart(data, indicator) {
+  return Highcharts.chart(chartContainer, {
+    chart: {
+      type: "line",
+      height: "400px",
+    },
+    title: {
+      text: `График для показателя "${indicator}"`,
+    },
+    xAxis: {
+      categories: ["День 1", "День 2", "День 3", "День 4", "День 5", "День 6"],
+    },
+    yAxis: {
+      title: {
+        text: "Значение",
+      },
+    },
+    series: [
+      {
+        name: indicator,
+        data: data,
+      },
+    ],
+  });
+}
+
 // Функция для расчета процентного изменения
 function calculatePercentageChange(current, yesterday) {
   if (yesterday === 0) {
-    return current === 0 ? "0%" : "∞"; // Обработка деления на ноль и 0/0
+    return current === 0 ? "0%" : "∞";
   }
   const change = ((current - yesterday) / yesterday) * 100;
   return `${change > 0 ? "+" : ""}${change.toFixed(0)}%`;
@@ -37,44 +64,41 @@ function createTableRows() {
       percentageClass = "percentage-negative";
     }
     tr.innerHTML = `
-    <td>${row.indicator}</td>
-    <td>${formatNumber(row.currentDay)}</td>
-    <td class="${changeClass}">${formatNumber(
+        <td>${row.indicator}</td>
+        <td>${formatNumber(row.currentDay)}</td>
+        <td class="${changeClass}">${formatNumber(
       row.yesterday
     )} <span style="float: right;" class="${percentageClass}">${percentageChange}</span></td>
-    <td>${formatNumber(row.thisDayLastWeek)}</td>
+        <td>${formatNumber(row.thisDayLastWeek)}</td>
     `;
-    tr.addEventListener("click", () => handleRowClick(row.data, row.indicator));
+    tr.addEventListener("click", () => handleRowClick(row, index));
     tableBody.appendChild(tr);
   });
 }
 
-// Функция для обработки клика по строке таблицы и отображения графика.
-function handleRowClick(data, indicator) {
+// Функция для обработки клика по строке
+function handleRowClick(row, index) {
+  tableBody.style.transition = "max-height 0.3s ease-out";
+  tableBody.style.maxHeight = "0px";
+  setTimeout(() => {
+    showChart(row, index);
+  }, 0);
+}
+
+// Функция для отображения графика
+function showChart(row, index) {
   chartContainer.style.display = "block";
+  chartContainer.style.opacity = 0;
+  chartContainer.style.transition = "opacity 0.5s";
+
   if (chart) {
     chart.destroy();
   }
-  chart = Highcharts.chart(chartContainer, {
-    title: {
-      text: `График для показателя "${indicator}"`,
-    },
-    xAxis: {
-      categories: ["День 1", "День 2", "День 3", "День 4", "День 5", "День 6"],
-    },
-    yAxis: {
-      title: {
-        text: "Значение",
-      },
-    },
-    series: [
-      {
-        name: indicator,
-        data: data,
-        type: "line",
-      },
-    ],
-  });
+  chart = createChart(row.data, row.indicator);
+
+  setTimeout(() => {
+    chartContainer.style.opacity = 1;
+  }, 0);
 }
 
 createTableRows();
