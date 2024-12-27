@@ -34,7 +34,16 @@ th {
 }
 td:nth-child(2) {
   background-color: #eef9ff;
+}
+td:nth-child(2),
+td:nth-child(4) {
   text-align: right;
+}
+/* Стили для ячеек с числами */
+.number-cell {
+  display: inline-block;
+  width: 80%;
+  text-align: center;
 }
 tbody tr:hover {
   background-color: #eef9ff;
@@ -59,4 +68,10 @@ tbody tr:hover {
 }
 .percentage-negative {
   color: red;
+}
+/* Стили для ячеек с процентами */
+.percentage-cell {
+  display: inline-block;
+  width: 20%;
+  text-align: right;
 }
