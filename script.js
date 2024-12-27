@@ -5,20 +5,11 @@ let chart = null;
 
 // Имитация загрузки данных с сервера
 async function fetchData() {
-  const response = await fetch("./data/data.js"); // Путь к файлу данных
+  const response = await fetch("./data/data.json"); // Путь к JSON файлу
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  const text = await response.text();
-  const firstOccurrence = text.indexOf("[");
-  const lastOccurrence = text.lastIndexOf("]");
-  const jsonString = text.substring(firstOccurrence, lastOccurrence + 1);
-  try {
-    return JSON.parse(jsonString);
-  } catch (error) {
-    console.log("Ошибка парсинга JSON", error);
-    return null;
-  }
+  return await response.json();
 }
 
 // Функция для создания Highcharts графика
