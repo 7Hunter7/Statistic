@@ -5,11 +5,12 @@ let chart = null;
 
 // Имитация загрузки данных с сервера
 async function fetchData() {
-  const response = await fetch("./data/data.json"); // Путь к JSON файлу
+  const response = await fetch("./data/data.json");
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  return await response.json();
+  data = await response.json();
+  return data;
 }
 
 // Функция для создания Highcharts графика
@@ -63,7 +64,7 @@ function formatNumber(number) {
 
 // Функция для создания строк таблицы на основе данных из tableData
 function createTableRows() {
-  tableData.forEach((row, index) => {
+  data.forEach((row, index) => {
     const tr = document.createElement("tr");
     // Условное добавление классов к ячейкам для отображения цвета
     const percentageChange = calculatePercentageChange(
