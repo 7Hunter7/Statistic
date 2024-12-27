@@ -4,11 +4,11 @@ const chartContainer = document.getElementById("chartContainer");
 let chart = null;
 
 // Функция для создания Highcharts графика
-function createChart(data, indicator) {
-  return Highcharts.chart(chartContainer, {
+function createChart(containerId, data, indicator) {
+  return Highcharts.chart(containerId, {
     chart: {
       type: "line",
-      height: "400px",
+      height: "300px",
     },
     title: {
       text: `График для показателя "${indicator}"`,
@@ -63,16 +63,23 @@ function createTableRows() {
       changeClass = "negative-change";
       percentageClass = "percentage-negative";
     }
+    const chartContainerId = `chart-container-${index}`; // Уникальный ID для каждого графика
     tr.innerHTML = `
-        <td>${row.indicator}</td>
-        <td>${formatNumber(row.currentDay)}</td>
-        <td class="${changeClass}">${formatNumber(
+    <td>${row.indicator}</td>
+    <td>${formatNumber(row.currentDay)}</td>
+    <td class="${changeClass}">${formatNumber(
       row.yesterday
     )} <span style="float: right;" class="${percentageClass}">${percentageChange}</span></td>
-        <td>${formatNumber(row.thisDayLastWeek)}</td>
-    `;
-    tr.addEventListener("click", () => handleRowClick(row, index));
+    <td>${formatNumber(row.thisDayLastWeek)}</td>
+  `;
+    const chartContainerDiv = document.createElement("tr");
+    chartContainerDiv.innerHTML = `<td colspan="4"><div id="${chartContainerId}" class="chart-container" style="display: none"></div></td>`;
+
+    tr.addEventListener("click", () => {
+      handleRowClick(row, chartContainerId);
+    });
     tableBody.appendChild(tr);
+    tableBody.appendChild(chartContainerDiv);
   });
 }
 
@@ -86,7 +93,8 @@ function handleRowClick(row, index) {
 }
 
 // Функция для отображения графика
-function showChart(row, index) {
+function showChart(row, containerId) {
+  const chartContainer = document.getElementById(containerId);
   chartContainer.style.display = "block";
   chartContainer.style.opacity = 0;
   chartContainer.style.transition = "opacity 0.5s";
